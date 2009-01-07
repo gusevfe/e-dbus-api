@@ -1,9 +1,9 @@
 
 [Desktop Entry]
 Type=Link
-Name=Typebuf Hooks
-Icon=e-module-typebuf-hooks
-Comment=<hilight>Typebuf Hooks:</hilight><br>Adds various hooks for EFM's typebuf</hilight><br>.
+Name=E DBUS API
+Icon=e-module-dbus-api
+Comment=<hilight>DBUS API:</hilight><br>Rule E via DBUS.</hilight><br>.
 
 #Several different types available here. NEED TO DOC THESE.
-X-Enlightenment-ModuleType=fileman
+X-Enlightenment-ModuleType=system

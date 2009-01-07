@@ -12,7 +12,7 @@ EDJE_FLAGS = -v \
 filesdir =  $(datadir)
 
 files_DATA = module.desktop \
-	     e-module-typebuf-hooks.edj
+	     e-module-dbus-api.edj
 
 EXTRA_DIST = $(files_DATA) \
 	     images/module_icon.png \
@@ -22,7 +22,7 @@ EXTRA_DIST = $(files_DATA) \
 	$(EDJE_CC) $(EDJE_FLAGS) $< $@
 
 clean-local:
-	 rm -rf e-module-typebuf-hooks.edj module.desktop *~
+	 rm -rf e-module-dbus-api.edj module.desktop *~
 uninstall:
 	 rm -rf $(DESTDIR)$(datadir)
 	 
