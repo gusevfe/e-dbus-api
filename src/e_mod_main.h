@@ -45,4 +45,8 @@ EAPI E_Config_Dialog *e_int_config_dbus_api_module(E_Container *con, const char 
 
 extern Config *dbus_api_conf;
 
+/* DBus Interface callbacks */
+
+DBusMessage *e_dbus_api_restart_cb(E_DBus_Object *obj, DBusMessage *message);
+
 #endif

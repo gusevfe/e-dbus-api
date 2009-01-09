@@ -103,6 +103,46 @@ e_modapi_init(E_Module *m)
     * this is not written */
    dbus_api_conf->module = m;
 
+   int r;
+
+   e_dbus_init();
+
+   E_DBus_Connection *conn = e_dbus_bus_get(DBUS_BUS_SESSION);
+
+   if (!conn)
+     {
+        return m;
+        fprintf(stderr, "Failed to connect to bus.\n");
+     }
+
+   E_DBus_Interface *iface = e_dbus_interface_new("org.e");
+
+   if (!iface)
+     {
+        return m;
+        fprintf(stderr, "Failed to create an interface.\n");
+     }
+
+   r = e_dbus_interface_method_add(iface, "Restart", "", "", e_dbus_api_restart_cb);
+
+   if (!r)
+     {
+        return m;
+        fprintf(stderr, "Failed to add method restart to interface.\n");
+     }
+
+   E_DBus_Object *o = e_dbus_object_add(conn, "/org/e/self", NULL);
+   
+   if (!o)
+     {
+        return m;
+        fprintf(stderr, "Failed to add object.\n");
+     }
+
+   e_dbus_object_interface_attach(o, iface);
+   
+   e_dbus_request_name(conn, "org.e", 0, NULL, NULL);
+
    /* Give E the module */
    return m;
 }
@@ -113,6 +153,8 @@ e_modapi_init(E_Module *m)
 EAPI int 
 e_modapi_shutdown(E_Module *m) 
 {
+   e_dbus_shutdown();
+
    /* Unregister the config dialog from the main panel */
    e_configure_registry_item_del("fileman/dbus_api");
 
@@ -185,4 +227,14 @@ _dbus_api_conf_timer(void *data)
 {
    e_util_dialog_show("DBUS API Configuration Updated", data);
    return 0;
+}
+
+DBusMessage *e_dbus_api_restart_cb(E_DBus_Object *obj, DBusMessage *message)
+{
+   DBusMessage *m = dbus_message_new_method_return(message);
+
+   restart = 1;
+   ecore_main_loop_quit();
+
+   return m;
 }
