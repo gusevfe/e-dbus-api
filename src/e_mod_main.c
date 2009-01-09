@@ -128,7 +128,7 @@ e_modapi_init(E_Module *m)
    if (!r)
      {
         return m;
-        fprintf(stderr, "Failed to add method restart to interface.\n");
+        fprintf(stderr, "Failed to add method Restart to interface.\n");
      }
 
    E_DBus_Object *o = e_dbus_object_add(conn, "/org/e/self", NULL);
