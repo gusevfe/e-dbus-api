@@ -156,11 +156,11 @@ e_modapi_shutdown(E_Module *m)
    e_dbus_shutdown();
 
    /* Unregister the config dialog from the main panel */
-   e_configure_registry_item_del("fileman/dbus_api");
+   e_configure_registry_item_del("extensions/dbus_api");
 
    /* Remove the config panel category if we can. E will tell us.
     category stays if other items using it */
-   e_configure_registry_category_del("fileman");
+   e_configure_registry_category_del("extensions");
 
    /* Kill the config dialog */
    if (dbus_api_conf->cfd) e_object_del(E_OBJECT(dbus_api_conf->cfd));
