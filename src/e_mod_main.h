@@ -55,4 +55,6 @@ void e_dbus_api_shutdown();
 
 DBusMessage *e_dbus_api_restart_cb(E_DBus_Object *obj, DBusMessage *message);
 
+DBusMessage *e_dbus_api_borders_action(E_DBus_Object *obj, DBusMessage *message);
+
 #endif
