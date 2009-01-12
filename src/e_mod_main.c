@@ -192,24 +192,16 @@ _dbus_api_conf_timer(void *data)
    return 0;
 }
 
-DBusMessage *e_dbus_api_restart_cb(E_DBus_Object *obj, DBusMessage *message)
-{
-   DBusMessage *m = dbus_message_new_method_return(message);
-
-   restart = 1;
-   ecore_main_loop_quit();
-
-   return m;
-}
-
 void e_dbus_api_init()
 {
    e_dbus_init();
    e_dbus_api_borders_init();
+   e_dbus_api_self_init();
 }
 
 void e_dbus_api_shutdown()
 {
+   e_dbus_api_self_shutdown();
    e_dbus_api_borders_shutdown();
    e_dbus_shutdown();
 }

@@ -95,6 +95,8 @@ e_dbus_api_borders_action(E_DBus_Object *obj, DBusMessage *message)
         return m;
      }
 
-   action->func.go(E_OBJECT(border), params);
+   if (action->func.go)
+     action->func.go(E_OBJECT(border), params);
+
    return m;
 }
