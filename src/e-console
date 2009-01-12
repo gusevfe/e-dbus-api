@@ -1,9 +1,0 @@
-#!/usr/bin/perl
-
-use Net::DBus;
-
-my $bus = Net::DBus->session();
-my $service = $bus->get_service("org.e");
-my $object = $service->get_object("/org/e/borders");
-
-$object->Action(0x1c0001c, "window_close", "");
