@@ -1,5 +1,6 @@
 #include <e.h>
 #include "e_mod_main.h"
+#include "e_dbus_api_borders.h"
 
 /* Local Function Prototypes */
 static void _dbus_api_conf_new(void);
@@ -203,120 +204,12 @@ DBusMessage *e_dbus_api_restart_cb(E_DBus_Object *obj, DBusMessage *message)
 
 void e_dbus_api_init()
 {
-   E_DBus_Interface *iface = NULL;
-   E_DBus_Connection *conn = NULL;
-   E_DBus_Object *o = NULL;
-
-   int r;
-
    e_dbus_init();
-
-   conn = e_dbus_bus_get(DBUS_BUS_SESSION);
-
-   if (!conn)
-     {
-        fprintf(stderr, "Failed to connect to bus.\n");
-        return;
-     }
-   
-   e_dbus_request_name(conn, "org.e", 0, NULL, NULL);
-
-   // **************************************         Self
-
-   iface = e_dbus_interface_new("org.e.self");
-
-   if (!iface)
-     {
-        fprintf(stderr, "Failed to create an interface.\n");
-        return;
-     }
-
-   r = e_dbus_interface_method_add(iface, "Restart", "", "", e_dbus_api_restart_cb);
-
-   if (!r)
-     {
-        fprintf(stderr, "Failed to add method Restart to interface.\n");
-        return;
-     }
-
-   o = e_dbus_object_add(conn, "/org/e/self", NULL);
-   
-   if (!o)
-     {
-        fprintf(stderr, "Failed to add object.\n");
-        return;
-     }
-
-   e_dbus_object_interface_attach(o, iface);
-   
-   // **************************************         Borders
-   
-   iface = e_dbus_interface_new("org.e.borders");
-
-   if (!iface)
-     {
-        fprintf(stderr, "Failed to create an interface.\n");
-        return;
-     }
-
-   r = e_dbus_interface_method_add(iface, "Action", "uss", "", e_dbus_api_borders_action);
-
-   if (!r)
-     {
-        fprintf(stderr, "Failed to add method Restart to interface.\n");
-        return;
-     }
-
-   o = e_dbus_object_add(conn, "/org/e/borders", NULL);
-   
-   if (!o)
-     {
-        fprintf(stderr, "Failed to add object.\n");
-        return;
-     }
-
-   e_dbus_object_interface_attach(o, iface);
+   e_dbus_api_borders_init();
 }
 
 void e_dbus_api_shutdown()
 {
+   e_dbus_api_borders_shutdown();
    e_dbus_shutdown();
-}
-
-DBusMessage *e_dbus_api_borders_action(E_DBus_Object *obj, DBusMessage *message)
-{
-   DBusMessage *m = dbus_message_new_method_return(message);
-   DBusMessageIter iter;
-   DBusError error;
-   int id;
-   char *name, *params;
-
-   if (dbus_message_get_args(message, NULL, 
-            DBUS_TYPE_UINT32, &id, 
-            DBUS_TYPE_STRING, &name, 
-            DBUS_TYPE_STRING, &params,
-            DBUS_TYPE_INVALID) == FALSE)
-     {
-        fprintf(stderr, "Failed to get args.\n");
-        return m;
-     }
-
-   E_Border *border = e_border_find_by_client_window((Ecore_X_Window)id);
-
-   if (!border)
-     {
-        fprintf(stderr, "Failed to find the border.\n");
-        return m;
-     }
-
-   E_Action *action = e_action_find(name); 
-   
-   if (!action)
-     {
-        fprintf(stderr, "Failed to find action '%s'.\n", name);
-        return m;
-     }
-
-   action->func.go(E_OBJECT(border), params);
-   return m;
 }
