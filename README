@@ -1,1 +1,7 @@
 E DBUS API Module
+
+Examples:
+---------
+    dbus-send --dest=org.e /org/e/self org.e.self.Restart
+    dbus-send --dest=org.e /org/e/self org.e.self.Exit string:""
+    dbus-send --dest=org.e /org/e/self org.e.self.Exit string:"now"
